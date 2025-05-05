@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  conectaadabot:
+    image: hvidigaljr/conectaadabot:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    networks:
+      - portainer
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
+      labels:
+          - traefik.enable=true
+          - traefik.http.routers.conectaadabot.rule=Host(`painelconecta.adabot.com.br`)
+          - traefik.http.routers.conectaadabot.entrypoints=websecure
+          - traefik.http.routers.conectaadabot.tls.certresolver=letsencryptresolver
+          - traefik.http.services.conectaadabot.loadbalancer.server.port=80
+          - traefik.http.services.conectaadabot.loadbalancer.passHostHeader=true
+          - traefik.http.routers.conectaadabot.service=conectaadabot
+    environment:
+      - VITE_SUPABASE_URL=https://oovwvznxynyzqwjkvoxn.supabase.co
+      - VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9vdnd2em54eW55enF3amt2b3huIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU4Nzk3MjUsImV4cCI6MjA2MTQ1NTcyNX0.wBtJm5I8-TUyTbcWsx0tG4IDIsnmzyV_afKMNCm-oVM
+
+networks:
+  portainer:
+    external: true
+    name: portainer
