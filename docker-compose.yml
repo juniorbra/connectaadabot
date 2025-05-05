@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   conectaadabot:
-    image: hvidigaljr/conectaadabot:latest
+    image: hvidigaljr/connectaadabot:latest
     build:
       context: .
       dockerfile: Dockerfile
